@@ -1,0 +1,16 @@
+#!/bin/sh
+set -eu
+
+echo "Running selenium browser tests"
+
+proj_path=extensions/TwoColConflict
+
+docker-compose -f docker-compose.yml -f docker-compose.browsertest.yml run --rm seleniumtests \
+$proj_path/node_modules/.bin/wdio $proj_path/tests/selenium/wdio.conf.js \
+--host selenium --spec $proj_path/tests/selenium/specs/editmerge.js
+
+#docker-compose -f docker-compose.yml -f docker-compose.browsertest.yml run --rm seleniumtests \
+#node_modules/.bin/wdio tests/selenium/wdio.conf.js --hostname selenium --spec /mediawiki/tests/selenium/specs/page.js
+
+echo "Removing browser test containers"
+docker-compose -f docker-compose.yml -f docker-compose.browsertest.yml rm -fsv seleniumtests selenium
