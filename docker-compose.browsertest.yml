@@ -1,0 +1,34 @@
+version: '2.2'
+
+services:
+  seleniumtests:
+    image: node:10
+    environment:
+      - MW_SERVER=http://default.web.mw.test:8080
+      - MW_SCRIPT_PATH=/mediawiki
+      - MEDIAWIKI_USER=admin
+      - MEDIAWIKI_PASSWORD=dockerpass
+      - DISPLAY=:99.0  # prevents selenium tests from being run headless
+      - NODE_DEBUG
+    command: echo 'invoke using ./browsertest'
+    working_dir: /mediawiki
+    dns:
+      - 172.0.0.10
+    networks:
+      - dps
+    volumes:
+      - ${DOCKER_MW_PATH}:/mediawiki
+    depends_on:
+      - selenium
+      - web
+
+  selenium:
+    image: selenium/standalone-chrome-debug
+    shm_size: 8gb
+    ports:
+      - 4444:4444
+      - 5900:5900  # used for VNC
+    dns:
+      - 172.0.0.10
+    networks:
+      - dps

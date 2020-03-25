@@ -14,7 +14,7 @@ if ( PHP_SAPI === 'cli' && !defined( 'MW_DB' ) ) {
 
 if ( defined( "MW_DB" ) ) {
     $dockerDb = MW_DB;
-    $wgServer = "//$dockerDb.web.mw.localhost:80";
+    $wgServer = "//$dockerDb.web.mw.test:80";
 } elseif( array_key_exists( 'SERVER_NAME', $_SERVER ) ) {
     $dockerHostParts = explode( '.', $_SERVER['SERVER_NAME'] );
     $dockerDb = $dockerHostParts[0];

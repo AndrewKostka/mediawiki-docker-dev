@@ -1,0 +1,13 @@
+#!/bin/bash
+set -e
+
+proj_path=$1
+spec_path=$2
+
+echo "Running selenium browser tests"
+docker-compose -f docker-compose.yml -f docker-compose.browsertest.yml run --rm seleniumtests \
+extensions/"$proj_path"/node_modules/.bin/wdio extensions/"$proj_path"/tests/selenium/wdio.conf.js \
+--hostname selenium --spec extensions/"$proj_path"/tests/selenium/specs/"$spec_path"
+
+echo "Removing browser test containers"
+docker-compose -f docker-compose.yml -f docker-compose.browsertest.yml rm -fsv seleniumtests selenium
