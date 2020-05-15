@@ -1,0 +1,16 @@
+#!/bin/bash
+set -eu
+
+echo "Running CentralAuth setup"
+
+echo "Creating CentralAuth wiki"
+./addsite centralauth
+
+echo "Running CentralAuth SQL update"
+docker-compose exec "web" sh -c "cd /var/www/mediawiki;php maintenance/sql.php --wikidb centralauth extensions/CentralAuth/central-auth.sql"
+
+echo "Running CentralAuth migrate pass 0"
+docker-compose exec "web" sh -c "cd /var/www/mediawiki;php extensions/CentralAuth/maintenance/migratePass0.php"
+
+echo "Running CentralAuth migrate pass 1"
+docker-compose exec "web" sh -c "cd /var/www/mediawiki;php extensions/CentralAuth/maintenance/migratePass1.php"

@@ -323,6 +323,51 @@ Run from the mediawiki-docker-dev directory:
 docker-compose exec "web" bash -c "cd /var/www/mediawiki/extensions/WikibaseLexeme; composer --ansi test"
 ```
 
+## Using CentralAuth
+
+### Setup process
+
+#### 1) Clone the CentralAuth extension
+
+```bash
+git clone https://gerrit.wikimedia.org/r/mediawiki/extensions/CentralAuth {PATH_TO_MEDIAWIKI_INSTALL}/extensions/CentralAuth
+```
+
+For example:
+```bash
+git clone https://gerrit.wikimedia.org/r/mediawiki/extensions/CentralAuth /srv/dev/git/gerrit/mediawiki/extensions/CentralAuth
+```
+
+#### 2) Ensure the development environment is running
+
+```bash
+mw-docker-dev resume
+```
+
+#### 3) Configure your LocalSettings.php
+
+Add to the bottom of your `LocalSettings.php` the following:
+```php
+require_once __DIR__ . '/.docker/CentralAuthSettings.php';
+```
+
+#### 4) Run the installation script
+
+```bash
+mw-docker-dev centralauth
+```
+
+#### 5) Updating /etc/hosts
+
+Add the following to your /etc/hosts file:
+```bash
+127.0.0.1 centralauth.web.mw.localhost # mediawiki-docker-dev
+```
+
+### Notes
+
+- [CentralAuth MediaWiki Site](http://centralauth.web.mw.test:8080)
+
 ## Access
 
 - [Default MediaWiki Site](http://default.web.mw.test:8080)
